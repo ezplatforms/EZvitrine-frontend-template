@@ -1,0 +1,29 @@
+name: Deploy to Firebase (DEV)
+
+on:
+  push:
+    branches:
+      - develop
+
+env:
+  FIREBASE_PROJECT_ID: ezvitrine-frontend-template
+  FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build app
+        run: npm run build
+
+      - name: Deploy to Firebase Hosting
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --project=$FIREBASE_PROJECT_ID --token=$FIREBASE_TOKEN
